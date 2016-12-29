@@ -2,6 +2,6 @@ require "sinatra"
 
 class FavLang < Sinatra::Base
   get "/" do
-    "A technical test"
+    erb :index
   end
 end
