@@ -1,3 +1,3 @@
 require "./app"
 
-run FavLang
+run FavLang::App
