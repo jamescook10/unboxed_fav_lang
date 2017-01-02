@@ -2,7 +2,7 @@ require "./lib/github_user"
 
 RSpec.describe GithubUser do
   let(:username)              { "jamesmarkcook" }
-  let(:user_response)         { double("Octokit response", rels: { repos: repo_page_1_uri }) }
+  let(:user_response)         { double("Octokit response", rels: { repos: repo_page_1_uri }, login: username) }
 
   #Page 1
   let(:repo_page_1_uri)       { double("Repo Page 1 URI", get: repo_page_1_response) }
@@ -19,16 +19,29 @@ RSpec.describe GithubUser do
   let(:repo_page_3_response)  { double("Repo  Page 3 Response", data: repositories_3, rels: {}) }
   let(:repositories_3)        { [] }
 
+  subject { GithubUser.new(username) }
+
   it "retrieves user information from Github API upon initialisation and assigns it to @user" do
     expect(Octokit).to receive(:user).with(username).and_return user_response
-    user = GithubUser.new(username)
-    expect(user.instance_variable_get("@user")).to eq user_response
+    subject
+    expect(subject.instance_variable_get("@user")).to eq user_response
+  end
+
+  context "when the github username is not found" do
+    it "raises a GithubUser::NotFound error" do
+      allow(Octokit).to receive(:user).and_raise(Octokit::NotFound)
+      expect{ subject }.to raise_error(GithubUser::NotFound)
+    end
+  end
+
+  describe "username" do
+    it "returns the user's github username" do
+      expect(subject.username).to eq username
+    end
   end
 
   describe "favourite_languages" do
     Repository = Struct.new(:name, :language)
-
-    subject { GithubUser.new username }
 
     before do
       allow(Octokit).to receive(:user).with(username).and_return user_response
@@ -62,6 +75,19 @@ RSpec.describe GithubUser do
 
       it "returns an array of the users favourite languages" do
         expect(subject.favourite_languages).to match_array ["Ruby", "Javascript"]
+      end
+    end
+
+    context "if the available repos don't have language information" do
+      let(:repositories_1) {
+        [
+          Repository.new("repo_a", nil),
+          Repository.new("repo_b", nil),
+        ]
+      }
+
+      it "returns an empty array" do
+        expect(subject.favourite_languages).to eq []
       end
     end
 

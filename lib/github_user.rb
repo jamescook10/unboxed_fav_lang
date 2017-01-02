@@ -1,12 +1,19 @@
 require 'octokit'
+require './services/logger'
 
 class GithubUser
+  class NotFound < StandardError; end
+
   def initialize(username)
-    @user = Octokit.user username
+    @user = fetch_user(username)
   end
 
   def favourite_languages
     @favourite_languages ||= find_favourite_languages
+  end
+
+  def username
+    @user.login
   end
 
   private
@@ -25,6 +32,16 @@ class GithubUser
     @repos_collection
   end
 
+  def fetch_user(username)
+    begin
+      Octokit.user(username).tap do
+        FavLangLogger.log(:info, "Fetched #{username} from api.github.com")
+      end
+    rescue Octokit::NotFound => e
+      raise NotFound, e
+    end
+  end
+
   def find_favourite_languages
     language_counts = languages_with_counts
     return [] if language_counts.empty?
@@ -35,6 +52,7 @@ class GithubUser
   end
 
   def languages
+    FavLangLogger.log(:info, "Calculating favourite language based on #{repos.count} public repos.")
     repos.map { |repo| repo.language }.compact
   end
 
