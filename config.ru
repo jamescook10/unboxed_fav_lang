@@ -1,3 +1,3 @@
 require "./app"
 
-run FavLang::App
+run Sinatra::Application
