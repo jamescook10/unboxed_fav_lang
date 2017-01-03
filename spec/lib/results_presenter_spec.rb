@@ -37,4 +37,32 @@ RSpec.describe ResultsPresenter do
       end
     end
   end
+
+  describe "#icons" do
+    let(:favourite_languages) { ["Ruby", "Javascript", "Go"]}
+    let(:icon_classes) {
+      [
+        "devicon-ruby-plain colored",
+        "devicon-javascript-plain colored",
+        "devicon-go-plain colored"
+      ]
+    }
+    it "returns an array of CSS classes for displaying language icons" do
+      expect(subject.icons).to match_array icon_classes
+    end
+
+    context "languages that don't have an icon" do
+      let(:favourite_languages) { ["Haskell", "Nimrod"] }
+      let(:unknown_languages) {
+        [
+          "unknown-language-icon",
+          "unknown-language-icon"
+        ]
+      }
+
+      it "presents a generic class" do
+        expect(subject.icons).to match_array unknown_languages
+      end
+    end
+  end
 end

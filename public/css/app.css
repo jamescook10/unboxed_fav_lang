@@ -36,11 +36,11 @@ nav span {
   top: 0.3rem;
 }
 
-section.hero {
+.hero {
   background-image: url(/images/github.jpg);
   box-sizing: border-box;
   height: 600px;
-  padding: 13rem 5rem 1rem;
+  padding: 12rem 5rem 1rem;
   text-align: center;
 }
 
@@ -99,6 +99,21 @@ textarea {
 
 .float.right {
   float: right;
+}
+
+.result.hero {
+  padding-top: 8rem;
+}
+
+section#icons i {
+  font-size: 8rem;
+  margin-right: 1rem;
+}
+
+section#result p {
+  font-size: 2rem;
+  text-align: center;
+  color: white;
 }
 
 footer {

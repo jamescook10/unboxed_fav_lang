@@ -1,0 +1,19 @@
+<div class="result hero">
+  <section id="icons">
+    <% icons.each do |icon_class| %>
+      <i class="<%= icon_class %>"></i>
+    <% end %>
+  </section>
+  <section id="result">
+    <p><%= result %></p>
+  </section>
+
+  <div class="username-form">
+    <form method="POST" action="/favourite_language">
+      <input type="text" placeholder="Try another Github username..." name="username">
+      <input type="submit" value="Find favourite language">
+    </form>
+  </div>
+</div>
+
+

@@ -14,6 +14,16 @@ class ResultsPresenter
     end
   end
 
+  def icons
+    @favlangs.map do |lang|
+      if name_map.keys.include?(lang.downcase.to_sym)
+        "devicon-#{name_map[lang.downcase.to_sym]}-plain colored"
+      else
+        "unknown-language-icon"
+      end
+    end
+  end
+
   private
 
   def build_multiple_languages_string
@@ -26,5 +36,28 @@ class ResultsPresenter
     end
 
     "#{@username}'s favourite languages are #{languages}."
+  end
+
+  def name_map
+    {
+      c: "c",
+      "c++": "cplusplus",
+      erlang: "erlang",
+      "c#": "csharp",
+      dockerfile: "docker",
+      html: "html5",
+      java: "java",
+      javascript: "javascript",
+      python: "python",
+      ruby: "ruby",
+      css: "css3",
+      go: "go",
+      less: "less",
+      sql: "postgresql",
+      coffeescript: "coffeescript",
+      php: "php",
+      sass: "sass",
+      scss: "sass",
+    }
   end
 end
