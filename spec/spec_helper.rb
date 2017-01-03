@@ -1,6 +1,7 @@
 require "rack/test"
 require "rspec"
-require 'pry'
+require "pry"
+require 'webmock/rspec'
 
 ENV["RACK_ENV"] = "test"
 
@@ -14,3 +15,5 @@ end
 RSpec.configure { |c| c.include RSpecMixin }
 
 FavLangLogger.level = :fatal
+
+WebMock.disable_net_connect!

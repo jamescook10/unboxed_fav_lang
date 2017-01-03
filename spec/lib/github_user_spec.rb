@@ -56,6 +56,7 @@ RSpec.describe GithubUser do
 
   describe "username" do
     it "returns the user's github username" do
+      allow(Octokit).to receive(:user).and_return user_response
       expect(subject.username).to eq username
     end
   end

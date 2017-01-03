@@ -4,6 +4,7 @@ ruby "2.3.0"
 gem "thin"
 gem "sinatra"
 gem "octokit", "~> 4.0"
+gem "webmock"
 
 group :test do
   gem "rspec"
