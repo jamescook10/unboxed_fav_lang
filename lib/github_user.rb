@@ -3,6 +3,7 @@ require './services/logger'
 
 class GithubUser
   class NotFound < StandardError; end
+  class TooManyRequests < StandardError; end
   class InvalidParams < StandardError; end
 
   def initialize(username)
@@ -41,6 +42,8 @@ class GithubUser
       end
     rescue Octokit::NotFound => e
       raise NotFound, e
+    rescue Octokit::TooManyRequests
+      raise TooManyRequests, "Oops! The Github API limit has been reached. Please try again in an hour :)"
     end
   end
 

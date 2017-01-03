@@ -38,5 +38,14 @@ RSpec.describe "Sinatra Application" do
         expect(last_response.body).to include("Username can't be blank.")
       end
     end
+
+    context "rate limit is exceeded" do
+      it "rescues the error and presents a friendly error page" do
+        stub_request(:get, "https://api.github.com/users/jamesmarkcook").
+          to_return(status: 403, body: "rate limit exceeded")
+        post "/favourite_language", username: username
+        expect(last_response.body).to include("Oops! The Github API limit has been reached. Please try again in an hour :)")
+      end
+    end
   end
 end

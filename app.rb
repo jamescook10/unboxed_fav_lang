@@ -18,6 +18,9 @@ post "/favourite_language" do
     erb :"results/user_not_found", locals: { username: params[:username] }
   rescue GithubUser::InvalidParams => e
     FavLangLogger.log(:error, e.message)
-    erb :"results/invalid_params"
+    erb :"results/error", locals: { message: e.message }
+  rescue GithubUser::TooManyRequests => e
+    FavLangLogger.log(:error, e.message)
+    erb :"results/error", locals: { message: e.message }
   end
 end

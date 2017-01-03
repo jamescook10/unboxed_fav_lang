@@ -54,6 +54,13 @@ RSpec.describe GithubUser do
     end
   end
 
+  context "when the Github API limit is reached" do
+    it "raises a GithubUser::TooManyRequests error" do
+      allow(Octokit).to receive(:user).and_raise(Octokit::TooManyRequests)
+      expect{ subject }.to raise_error(GithubUser::TooManyRequests)
+    end
+  end
+
   describe "username" do
     it "returns the user's github username" do
       allow(Octokit).to receive(:user).and_return user_response
