@@ -4,6 +4,8 @@ require "./lib/github_user"
 require "./lib/results_presenter"
 require './services/logger'
 
+FavLangLogger.level = ENV['LOG_LEVEL'] || :info
+
 get "/" do
   erb :index
 end
