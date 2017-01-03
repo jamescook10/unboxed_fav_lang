@@ -10,18 +10,8 @@ end
 post "/favourite_language" do
   begin
     user = GithubUser.new(params[:username])
-    favlang = user.favourite_languages
-
-    case
-    when favlang.empty?
-      result = "#{user.username} does not appear to have any public repos with language information."
-    when favlang.count == 1
-      result = "#{user.username}'s favourite language is #{favlang.first}."
-    when favlang.count > 1
-      result = "#{user.username}'s favourite languages are #{favlang.join(", ")}."
-    else
-      result = "Something went wrong eeeek."
-    end
+    presenter = ResultsPresenter.new(user.username, user.favourite_languages)
+    result = presenter.result_string
   rescue GithubUser::NotFound => e
     FavLangLogger.log(:error, "Github user '#{params[:username]}'' could not be found.")
     result = "Could not find user '#{params[:username]}'. Please try again."

@@ -14,39 +14,13 @@ RSpec.describe "Sinatra Application" do
     let(:username) { 'jamesmarkcook' }
 
     context "user can be found" do
-      context "has 1 or more public repos" do
-        let(:github_user_double) { double(GithubUser, favourite_languages: favourite_languages, username: username) }
+      let(:github_user_double) { double(GithubUser, favourite_languages: favourite_languages, username: username) }
+      let(:favourite_languages) { [] }
 
-        before do
-          allow(GithubUser).to receive(:new).with(username).and_return github_user_double
-        end
-
-        context "user has one favourite language" do
-          let(:favourite_languages) { ["Ruby"] }
-
-          it "displays the user's favourite language" do
-            post "/favourite_language", username: username
-            expect(last_response.body).to include("#{username}'s favourite language is Ruby")
-          end
-        end
-
-        context "user has more than one favourite language" do
-          let(:favourite_languages) { ["Ruby", "Javascript"] }
-
-          it "displays the user's favourite languages" do
-            post "/favourite_language", username: username
-            expect(last_response.body).to include("#{username}'s favourite languages are Ruby, Javascript.")
-          end
-        end
-
-        context "user doesn't have any public repos with language information" do
-          let(:favourite_languages) { [] }
-
-          it "displays a relevant message" do
-            post "/favourite_language", username: username
-            expect(last_response.body).to include("#{username} does not appear to have any public repos with language information.")
-          end
-        end
+      it "sends the favourite languages to the ResultsPresenter" do
+        allow(GithubUser).to receive(:new).and_return github_user_double
+        expect(ResultsPresenter).to receive(:new).with(username, favourite_languages).and_call_original
+        post "/favourite_language", username: username
       end
     end
 
