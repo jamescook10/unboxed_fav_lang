@@ -13,4 +13,4 @@ end
 
 RSpec.configure { |c| c.include RSpecMixin }
 
-FavLangLogger.level = :warn
+FavLangLogger.level = :fatal

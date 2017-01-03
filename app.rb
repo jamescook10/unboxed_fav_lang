@@ -23,7 +23,11 @@ post "/favourite_language" do
       result = "Something went wrong eeeek."
     end
   rescue GithubUser::NotFound => e
-    result = "User could not be found."
+    FavLangLogger.log(:error, "Github user '#{params[:username]}'' could not be found.")
+    result = "Could not find user '#{params[:username]}'. Please try again."
+  rescue GithubUser::InvalidParams => e
+    FavLangLogger.log(:error, e.message)
+    result = e.message
   end
 
   erb :favourite_language, locals: {result: result}

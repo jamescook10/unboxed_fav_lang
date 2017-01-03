@@ -3,8 +3,10 @@ require './services/logger'
 
 class GithubUser
   class NotFound < StandardError; end
+  class InvalidParams < StandardError; end
 
   def initialize(username)
+    raise InvalidParams, "Username can't be blank." if username.nil? || username == ""
     @user = fetch_user(username)
   end
 

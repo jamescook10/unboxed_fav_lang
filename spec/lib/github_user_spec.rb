@@ -34,6 +34,26 @@ RSpec.describe GithubUser do
     end
   end
 
+  context "when the username is blank" do
+    context "by being nil" do
+      let(:username) { nil }
+
+      it "raises a GithubUser::InvalidParams error" do
+        expect(Octokit).not_to receive(:user)
+        expect{ subject }.to raise_error(GithubUser::InvalidParams)
+      end
+    end
+
+    context "by being an empty string" do
+      let(:username) { "" }
+
+      it "raises a GithubUser::InvalidParams error" do
+        expect(Octokit).not_to receive(:user)
+        expect{ subject }.to raise_error(GithubUser::InvalidParams)
+      end
+    end
+  end
+
   describe "username" do
     it "returns the user's github username" do
       expect(subject.username).to eq username

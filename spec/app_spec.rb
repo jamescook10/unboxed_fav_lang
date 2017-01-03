@@ -6,7 +6,7 @@ RSpec.describe "Sinatra Application" do
       get "/"
 
       expect(last_response).to be_ok
-      expect(last_response.body).to include("Find your favourite programming language!")
+      expect(last_response.body).to include("Find a user's favourite coding language by entering their Github username below.")
     end
   end
 
@@ -51,13 +51,17 @@ RSpec.describe "Sinatra Application" do
     end
 
     context "user can't be found" do
-      before do
-        allow(GithubUser).to receive(:new).and_raise GithubUser::NotFound
-      end
-
       it "rescues the error and displays a helpful message" do
+        allow(GithubUser).to receive(:new).and_raise GithubUser::NotFound
         post "/favourite_language", username: username
-        expect(last_response.body).to include("User could not be found.")
+        expect(last_response.body).to include("Could not find user '#{username}'. Please try again.")
+      end
+    end
+
+    context "username submitted is blank" do
+      it "rescues the error and displays a helpful message" do
+        post "/favourite_language", username: nil
+        expect(last_response.body).to include("Username can't be blank.")
       end
     end
   end
