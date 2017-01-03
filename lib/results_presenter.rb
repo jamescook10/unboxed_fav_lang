@@ -6,7 +6,7 @@ class ResultsPresenter
 
   def result_string
     if @favlangs.empty?
-      "#{@username} does not appear to have any public repos with language information."
+      "#{@username} does not appear to have any public repos with language information. Please try again."
     elsif @favlangs.count == 1
       "#{@username}'s favourite language is #{@favlangs.first}."
     elsif @favlangs.count > 1

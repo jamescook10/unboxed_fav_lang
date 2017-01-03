@@ -9,7 +9,7 @@ RSpec.describe ResultsPresenter do
   describe "#result_string" do
     context "when there is no favourite language" do
       it "returns a a helpful message" do
-        expect(subject.result_string).to eq "#{username} does not appear to have any public repos with language information."
+        expect(subject.result_string).to eq "#{username} does not appear to have any public repos with language information. Please try again."
       end
     end
 
