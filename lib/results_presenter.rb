@@ -28,9 +28,10 @@ class ResultsPresenter
 
   def build_multiple_languages_string
     if @favlangs.count > 2
-      last_language = @favlangs.pop
-      languages = @favlangs.join(", ")
-      languages += " and #{last_language}"
+      favlangs_dup = @favlangs.dup
+      last_language = favlangs_dup.pop
+      first_languages = favlangs_dup.join(", ")
+      languages = first_languages + " and #{last_language}"
     else
       languages = @favlangs.join(" and ")
     end
